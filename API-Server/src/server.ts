@@ -1,6 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import UserRoutes from './routes/User/UserRoute';
+import bodyParser from 'body-parser';
+
 
 mongoose.connect('mongodb://localhost:27017/local', (_err, _res) => {
     if (_err) {
@@ -10,8 +12,11 @@ mongoose.connect('mongodb://localhost:27017/local', (_err, _res) => {
 });
 
 const app = express();
-const port = 3000;
+const port = 4500;
 
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+app.use(bodyParser.json())
 app.use('/', UserRoutes);
 
 app.listen(port, err => {

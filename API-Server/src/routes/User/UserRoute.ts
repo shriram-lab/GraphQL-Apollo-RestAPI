@@ -17,8 +17,11 @@ router.post('/user', (req, res) => {
 
     const saveUser = new Users({});
 
-    saveUser.firstName = "Shri";
-    saveUser.lastName = "k";
+    // console.log(req.body)
+
+    saveUser.firstName = req.body.firstName;
+    saveUser.lastName = req.body.lastName;
+    saveUser.discription = req.body.discription;
 
     saveUser.save((_err, _res) => {
         if (_err) {

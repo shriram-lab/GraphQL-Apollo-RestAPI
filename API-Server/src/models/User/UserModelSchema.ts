@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const UserModelSchema = new Schema({
     firstName: String,
-    lastName: String
+    lastName: String,
+    discription: String
 });
 
 export default UserModelSchema;
