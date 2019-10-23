@@ -1,17 +1,20 @@
 import React from "react";
-import AppNavBar from "./components/AppNavBar";
-import NewUserDialog from "./components/NewUserDialog";
 import { client } from "./API/api";
 import { gql } from "apollo-boost";
+import AppNavBar from "./components/AppNavBar";
+import NewUserDialog from "./components/NewUserDialog";
+import DeleteDialogSlide from "./components/DeleteDialogSlide";
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
       openDialog: false,
+      openDeleteDialog: false,
       firstName: "",
       lastName: "",
       discription: "",
+      id: "",
       allUsers: []
     };
   }
@@ -22,9 +25,37 @@ class App extends React.Component {
     });
   };
 
+  handlerDeleteSubmit = event => {
+    event.preventDefault();
+    const id = this.state.id;
+    client
+      .mutate({
+        variables: { _id: id },
+        mutation: gql`
+          mutation deleteUser($_id: ID!) {
+            deleteUser(_id: $_id) {
+              _id
+            }
+          }
+        `
+      })
+      .then(result => {
+        this.setState({
+          openDialog: false,
+          openDeleteDialog:false,
+          id:""
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
   handleClose = event => {
     this.setState({
-      openDialog: false
+      openDialog: false,
+      openDeleteDialog: false,
+      id: ""
     });
   };
   handlerClickSubmit = event => {
@@ -70,7 +101,11 @@ class App extends React.Component {
   };
 
   HandleDelete = id => {
-console.log(id)
+    this.setState({
+      openDeleteDialog: true,
+      openDialog: false,
+      id: id
+    });
   };
 
   handleChange = event => {
@@ -124,6 +159,11 @@ console.log(id)
           onHandlerSubmit={this.handlerClickSubmit}
           onhandleChange={this.handleChange}
         ></NewUserDialog>
+        <DeleteDialogSlide
+          openDeleteDialog={this.state.openDeleteDialog}
+          onHandlerClose={this.handleClose}
+          onhandlerDelete={this.handlerDeleteSubmit}
+        ></DeleteDialogSlide>
       </div>
     );
   }
