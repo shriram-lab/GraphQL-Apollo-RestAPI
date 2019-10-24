@@ -27,7 +27,7 @@ export default function DeleteDialogSlide(props) {
         <DialogTitle id="alert-dialog-slide-title">
           {"Delete"}
         </DialogTitle>
-        <DialogContent fullWidth>
+        <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
             Are you sure want to delete ?
           </DialogContentText>

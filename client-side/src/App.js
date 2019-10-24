@@ -5,6 +5,7 @@ import AppNavBar from "./components/AppNavBar";
 import NewUserDialog from "./components/NewUserDialog";
 import DeleteDialogSlide from "./components/DeleteDialogSlide";
 
+
 class App extends React.Component {
   constructor() {
     super();
@@ -44,7 +45,7 @@ class App extends React.Component {
           openDialog: false,
           openDeleteDialog:false,
           id:""
-        });
+        },this.getUserData());
       })
       .catch(error => {
         console.log(error);
@@ -90,7 +91,8 @@ class App extends React.Component {
       .then(result => {
         this.setState(
           {
-            openDialog: false
+            openDialog: false,
+            openDeleteDialog:false
           },
           this.getUserData()
         );
@@ -99,6 +101,18 @@ class App extends React.Component {
         console.log(error);
       });
   };
+
+  // subscription
+  subscribe = (query, callback) => {
+    return client.subscribe({
+     query: gql(query),
+    }).subscribe({
+     next(data) {
+      callback(data)
+     },
+    })
+   }
+  // end
 
   HandleDelete = id => {
     this.setState({
@@ -135,6 +149,7 @@ class App extends React.Component {
         `
       })
       .then(result => {
+        console.log(result)
         this.setState({
           allUsers: result.data.currentUser
         });
